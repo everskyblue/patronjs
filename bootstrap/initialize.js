@@ -1,4 +1,13 @@
-import dispatcher from "./dispatcher.js";
-import routes from "./routes.js";
+import app from "./routes.js";
+import URLStateCapture from "../lib/url-state.js";
 
-dispatcher(routes);
+try {
+    const evt = new URLStateCapture();
+
+    /**
+     * hash change
+     */
+    evt.state(app.run(evt))
+} catch (e) {
+    app.handlerError(e);
+}

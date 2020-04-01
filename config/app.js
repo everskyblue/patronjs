@@ -1,10 +1,13 @@
+// capture exception
+export const debug = true;
+
 // url base for location view, database
 export const base_url = location.origin;
 
 // location assets
 export const assets_location= {
-    js: '/assets/js/',
-    css: '/assets/css/'
+    js: '/public/assets/js/',
+    css: '/public/assets/css/'
 };
 
 /**
@@ -20,27 +23,18 @@ export const cview = {
 
     ext: '.html',
 
-    join: document.querySelector('#content')
+    join: '#content'
 }
 
 // location db
 const pdb = base_url +'/data/db';
 
-/**
- * json format database configuration
- * @typedef cdb
- * @type {object}
- * @property {string} path - folder where save data
- * @property {string} connection - type connection [stream|url]
- * @property {string} root - main db - use administrator panel
- * @property {string} ability_save_local_data - administrator panel for data storage
- */
-export const cdb = {
+export const database = {
     path: pdb,
 
-    connection: 'stream',
+    type: 'fetch', // node | fetch | external
 
-    root: (pdb + '/def.json'),
+    schema: (pdb + '/dbschema.json'),
 
-    ability_save_local_data: true
+    use: 'testing'
 }
