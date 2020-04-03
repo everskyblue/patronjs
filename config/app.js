@@ -16,14 +16,14 @@ export const assets_location= {
  * @type {object}
  * @property {string} path - url view
  * @property {string} ext - use extension
- * @property {HTMLElement} join - when add view
+ * @property {string} join - when add view
  */
 export const cview = {
     path: (base_url +'/views/'),
 
     ext: '.html',
 
-    join: '#content'
+    join: '#output'
 }
 
 // location db
