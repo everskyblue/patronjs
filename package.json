@@ -1,5 +1,5 @@
 {
-  "name": "patronjs",
+  "name": "jspatron",
   "version": "0.2.6",
   "description": "framework web based in SPA",
   "main": "bootstrap/dispatch.js",
@@ -11,19 +11,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/everskyblue/Patron.js.git"
+    "url": "git+https://github.com/everskyblue/patronjs.git"
   },
   "keywords": [
     "framework",
     "spa",
     "patron",
+    "jspatron",
     "router",
     "route"
   ],
   "author": "Nike Madrid",
-  "license": "ISC",
+  "license": "BSD 2-Clause",
   "bugs": {
-    "url": "https://github.com/everskyblue/Patron.js/issues"
+    "url": "https://github.com/everskyblue/patronjs/issues"
   },
-  "homepage": "https://github.com/everskyblue/Patron.js#readme"
+  "homepage": "https://github.com/everskyblue/patronjs#readme"
 }
