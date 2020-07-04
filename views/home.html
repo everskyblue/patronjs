@@ -1,3 +1,20 @@
+<style :scope>
+
+    h1 {
+        color: red;
+    }
+
+</style>
+
 <div>
-    <h1 patron-key="h1"></h1>
+    <h1 :bind="h1"></h1>
+    <ul>
+        <li @for="list in lists" @click="clickList"></li>
+    </ul>
 </div>
+
+<script>
+    function clickList() {
+        console.log('click!');
+    }
+</script>
