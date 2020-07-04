@@ -25,16 +25,3 @@ export const cview = {
 
     join: '#output'
 }
-
-// location db
-const pdb = base_url +'/data/db';
-
-export const database = {
-    path: pdb,
-
-    type: 'fetch', // node | fetch | external
-
-    schema: (pdb + '/dbschema.json'),
-
-    use: 'testing'
-}
