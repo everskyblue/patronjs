@@ -7,7 +7,7 @@
 <div>
     <h1 :bind="h1"></h1>
     <ul class="nodes">
-        <li @for="list of lists" @event:input:click="clickList" contenteditable>
+        <li @for="list of lists" @event:input:click={clickList} contenteditable>
             number <span :bind="list"></span>
         </li>
     </ul>
