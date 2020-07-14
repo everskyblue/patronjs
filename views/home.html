@@ -18,14 +18,16 @@
     var tt = 'out';
     
     const is = lists.length === 0;
-
+    
     async function clickList(e) {
         if (e.type === 'click') {
-            $data.h1 = 'lista de usuarios'
-            const res = await fetch('http://jsonplaceholder.typicode.com/users')
-            const u = await res.json()
-            $data.lists = u
-            console.log(u);
+            try {
+                $data.h1 = 'lista de usuarios'
+                const res = await fetch('http://jsonplaceholder.typicode.com/users')
+                const u = await res.json()
+                $data.lists = u
+                console.log(u);/* code */
+            } catch (e) {alert(e)}
         }
     }
 </script>
