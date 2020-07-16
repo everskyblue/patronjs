@@ -7,10 +7,10 @@
 <div>
     <h1 :bind="h1"></h1>
     <ul class="nodes">
-        <li @if={is} @for="list of lists" @event:input:click={clickList} contenteditable>
+        <li @for="list of lists" @if={is} @event:input:click={clickList} contenteditable>
             number <span :bind="list.name"></span>
         </li>
-        <span :bind={tt}></span>
+        <span :bind="h1"></span>
     </ul>
 </div>
 
@@ -23,10 +23,10 @@
         if (e.type === 'click') {
             try {
                 $data.h1 = 'lista de usuarios'
-                const res = await fetch('http://jsonplaceholder.typicode.com/users')
-                const u = await res.json()
-                $data.lists = u
-                console.log(u);/* code */
+                //const res = await fetch('http://jsonplaceholder.typicode.com/users')
+                //const u = await res.json()
+                //$data.lists = u
+                console.log(e.target);/* code */
             } catch (e) {alert(e)}
         }
     }

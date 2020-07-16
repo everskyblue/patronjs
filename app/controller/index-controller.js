@@ -2,7 +2,7 @@ export default class IndexController {
     constructor(container) {
         container.view.render('home', {
             h1: 'getting started with patronjs',
-            lists: []
+            lists: [' text 1', 'text 2']
         });
     }
 
