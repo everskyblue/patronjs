@@ -7,11 +7,11 @@ route.hash('/', {
         js: ['index'],
         css: []
     }
-});
+}, 'render');
 
 
-route.hash('/contact', controller.ContactController);
-route.hash('/articulos', controller.ArticleController);
+route.hash('/contact', controller.ContactController, 'render');
+route.hash('/articulos', controller.ArticleController, 'render');
 
 
 export default route;
