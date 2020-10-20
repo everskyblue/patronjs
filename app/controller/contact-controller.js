@@ -5,6 +5,6 @@ export default class ContactController extends Controller {
         super()
     }
     render() {
-        console.log('contact')
+        return 'section contact';
     }
 }

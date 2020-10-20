@@ -5,6 +5,6 @@ export default class ArticleController extends Controller {
         super()
     }
     render() {
-        console.log('articles')
+        return 'section articles';
     }
 }
