@@ -1,5 +1,8 @@
 import Patron from "../lib/patron.js";
 import * as config  from "../config/app.js";
+import { setUtilLocation } from "../lib/helpers.js";
+
+setUtilLocation(config.base_url, config.assets_location);
 
 let app = new Patron(config);
 
