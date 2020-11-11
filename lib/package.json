@@ -1,0 +1,30 @@
+{
+  "name": "jspatron",
+  "version": "0.9.1",
+  "description": "pequeña libreria para el manejo de aplicaciones spa",
+  "main": "./patron.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "framework",
+    "spa",
+    "patron",
+    "jspatron",
+    "router",
+    "route"
+  ],
+  "files": [
+    "patron.js",
+    "url-state.js",
+    "helpers.js",
+    "container.js",
+    "globals.js",
+    "https/**",
+    "route/**",
+    "view/**"
+  ],
+  "typings": "typings/index.d.ts",
+  "author": "Nike Madrid",
+  "license": "MIT"
+}
