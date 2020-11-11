@@ -1,0 +1,33 @@
+<style scope>
+    h1 {
+        color: red;
+    }
+</style>
+
+<div>
+    <h1 :bind="h1"></h1>
+    <ul class="nodes">
+        <li @if={is} @for="list of lists" @event:input:click={clickList} contenteditable>
+            number <span :bind="list.name">4</span>
+        </li>
+        <span :bind="h1">s</span>
+    </ul>
+</div>
+
+<script>
+    var tt = 'out';
+    
+    const is = lists.length !== 0;
+    
+    async function clickList(e) {
+        if (e.type === 'click') {
+            try {
+                //$data.h1 = 'lista de usuarios'
+                const res = await fetch('http://jsonplaceholder.typicode.com/users')
+                const u = await res.json()
+                $data.lists = u
+                console.log($data);/* code */
+            } catch (e) {console.log(e)}
+        }
+    }
+</script>
