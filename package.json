@@ -1,14 +1,13 @@
 {
-  "name": "jspatron",
-  "version": "0.9.1",
-  "description": "core functionality of patronjs",
+  "name": "jspatron-skeleton",
+  "version": "1.0.0",
+  "description": "skeleton application of patronjs",
+  "main": "index.js",
+  "author": "Nike Madrid",
+  "license": "BSD-2-Clause",
+  "homepage": "https://github.com/everskyblue/patronjs#readme",
   "scripts": {
-    "start": "webpack --mode none",
-    "babel": "babel --config-file ./.babelrc --out-dir lib/outlib ./lib"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/everskyblue/patronjs.git"
+    "start": "webpack --mode development"
   },
   "keywords": [
     "framework",
@@ -16,16 +15,15 @@
     "patron",
     "jspatron",
     "router",
-    "route"
+    "route",
+    "skeleton-patronjs"
   ],
-  "author": "Nike Madrid",
-  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/everskyblue/patronjs/issues"
   },
-  "homepage": "https://github.com/everskyblue/patronjs#readme",
   "dependencies": {},
   "devDependencies": {
+    "@types/patron": "1.0.0",
     "@babel/core": "^7.12.3",
     "@babel/plugin-transform-async-to-generator": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.1",

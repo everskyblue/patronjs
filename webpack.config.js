@@ -1,10 +1,17 @@
 const path = require('path')
 
 module.exports = {
-    entry: path.resolve(__dirname, 'lib'),
+    entry: {
+        'app.bundle': path.resolve(__dirname, 'bootstrap/initialize.js')
+        /**
+         * bundle framework
+         */
+        //'patron.bundle': path.resolve(__dirname, 'node_modules/jspatron/globals.js')
+    },
     output: {
-        path: path.resolve(__dirname, "bundle"),
-        filename: "patron.bundle.js",
+        // options related to how webpack emits results
+        path: path.resolve(__dirname, "dist"),
+        filename: "[name].js",
         libraryTarget: "umd"
     },
     module: {
@@ -15,5 +22,11 @@ module.exports = {
                 use: ['babel-loader']
             }
         ]
+    },
+    resolve: {
+        modules: ["node_modules", path.resolve(__dirname, "node_modules")]
+    },
+    externals: {
+        jspatron: 'jspatron'
     }
 }
