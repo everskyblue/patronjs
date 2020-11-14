@@ -21,9 +21,10 @@
   "bugs": {
     "url": "https://github.com/everskyblue/patronjs/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+    "jspatron": "^0.9.0"
+  },
   "devDependencies": {
-    "jspatron": "^0.9.0",
     "@babel/core": "^7.12.3",
     "@babel/plugin-transform-async-to-generator": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.1",
