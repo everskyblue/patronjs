@@ -3,8 +3,9 @@
   "version": "0.9.1",
   "description": "core functionality of patronjs",
   "scripts": {
-    "start": "webpack --mode none",
-    "babel": "babel --config-file ./.babelrc --out-dir lib/outlib ./lib"
+    "start": "webpack --mode production",
+    "dev": "webpack --mode development",
+    "babel": "babel --config-file ./.babelrc --out-dir patron-core/outlib ./patron-core"
   },
   "repository": {
     "type": "git",

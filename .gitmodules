@@ -1,0 +1,8 @@
+[submodule "patron-core"]
+	path = patron-core
+	url = git@github.com:everskyblue/patronjs.git
+	branch = lib
+[submodule "patron-skeleton"]
+	path = patron-skeleton
+	url = git@github.com:everskyblue/patronjs.git
+	branch = master
