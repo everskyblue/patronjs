@@ -12,3 +12,5 @@ you need to have babeljs installed and install the development dependencies
 }
 ```
 the framework uses async await to render the view
+
+> is a dependency, [see](https://github.com/everskyblue/patronjs) the structure
