@@ -6,3 +6,7 @@
 	path = patron-skeleton
 	url = git@github.com:everskyblue/patronjs.git
 	branch = master
+[submodule "patron-installer"]
+	path = patron-installer
+	url = git@github.com:everskyblue/patron-installer.git
+	branch = master
