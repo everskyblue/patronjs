@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-    entry: path.resolve(__dirname, 'lib'),
+    entry: path.resolve(__dirname, 'global.js'),
     output: {
         path: path.resolve(__dirname, "bundle"),
         filename: "patron.bundle.js",
