@@ -1,5 +1,5 @@
 {
     "name": "jspatron/http",
-    "main": "../outlib/route/route.js",
-    "typings": "../typings/index.d.ts"
+    "main": "../outlib/http/todo.js",
+    "typings": "../typings/http.d.ts"
 }
