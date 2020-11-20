@@ -1,5 +1,4 @@
-/* import URLStateCapture from "jspatron/url-state";
-
+import {URLStateCapture} from "jspatron/app"
 import app from "./routes.js";
 
 try {
@@ -8,10 +7,9 @@ try {
     /**
      * hash change
      */
- /*   evt.state(app.run(evt))
+    evt.state(app.run(evt))
 } catch (e) {
     app.handlerError(e);
-} */
-import Route  from "jspatron/route";
+}
 
-console.log(Route);
+console.log();

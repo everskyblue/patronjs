@@ -1,4 +1,4 @@
-import Patron from "jspatron/patron";
+import {App as Patron} from "jspatron/app";
 import * as config  from "../config/app.js";
 
 let app = new Patron(config);
