@@ -23,7 +23,7 @@ export default class HRequest {
         if (search.startsWith('?', 0)) {
             search = search.substring(1);
         }
-        search.split('&', q => {
+        search.split('&').forEach(q => {
             let split = q.split('=');
             params[split[0]] = split[1];
         });
@@ -34,14 +34,14 @@ export default class HRequest {
      * @return {boolean}
      */
     isHTTP() {
-        return location.protocol.replace(':') === 'http';
+        return location.protocol.substr(0, location.protocol.length - 1) === 'http';
     }
 
     /**
      * @return {boolean}
      */
     isHTTPS() {
-        return location.protocol.replace(':') === 'https';
+        return location.protocol.substr(0, location.protocol.length - 1) === 'https';
     }
 
     /**
