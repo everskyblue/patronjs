@@ -25,7 +25,7 @@ module.exports = {
         ]
     },
     resolve: {
-        modules: [path.resolve(__dirname, "node_modules")]
+        modules: [path.resolve(__dirname, "node_modules"),path.resolve(__dirname, "../node_modules")]
     },
     externals: {
         jspatron: 'jspatron'

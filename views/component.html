@@ -1,0 +1,31 @@
+<script type="context">
+    //import PartialFooter from "./partials/footer.html"
+    //import PartialHeader from "./partials/header.html"
+
+    export let count = 0;
+</script>
+
+<slot tag="title"> nuevo titulo de la pagina </slot>
+
+<slot tag="head">
+    <style>
+        body {
+            background-color: aqua;
+        }
+    </style>
+</slot>
+
+<PartialHeader></PartialHeader>
+<PartialFooter></PartialFooter>
+
+hello
+
+<script>
+/**
+ * @link https://gist.github.com/MohamedLamineAllal/31e9665dac3913cf8a3fd901ed9bbe43
+ */
+
+var i = /import\s+?(?:(?:([\w*\s{},]*)\s+from\s+?)|)(?:(?:"(.*?)")|(?:'(.*?)'))[\s]*?(?:;|$|)/g
+let s = document.scripts[0].text
+console.log(s.match(i));
+</script>
