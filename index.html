@@ -6,6 +6,48 @@
     <title>patron</title>
 </head>
 <body>
+    <x-extends path="surc/index.html" selector="#outlet">
+        <h1>new element component</h1>
+    </x-extends>
     <script src="patron-core/bundle/patron.bundle.js"></script>
+    <script>
+     class XExtends extends HTMLElement {
+        /**
+         * @constructor
+         */
+        constructor() {
+            super();
+            this.attachShadow({mode: 'open'})
+            /** @type {string} path ruta del archivo */
+            this.path = null;
+            /** @type {string} nombre del nodo, selecciona un elemento donde va a ir el contenido */
+            this.select_node = null;
+            /** @type {string} selecciona el nombre de una seccion donde se hara la salida del contenido */
+            this.name = null;
+        }
+
+        attributeChangedCallback(name, oval, nval) {
+            switch (name) {
+                case 'selector':
+                    this.select_node = nval;
+                    break;
+                default:
+                    this[name] = nval;
+                    break;
+            }
+        }
+
+        connectedCallback() {
+            console.log(this.innerHTML
+            )
+        }
+
+        static get observedAttributes() {
+            return ['path', 'selector']
+        }
+
+    }
+    customElements.define('x-extends', XExtends)
+    </script>
 </body>
 </html>
