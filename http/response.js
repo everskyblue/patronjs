@@ -3,6 +3,7 @@ import Status from "./status.js";
 /**
  * @version 0.1.0
  */
+// @ts-ignore
 export default class HResponse extends Status {
     /**
      * @constructor

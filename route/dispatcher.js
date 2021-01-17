@@ -1,6 +1,10 @@
 import {match_url, load_assets, page_not_fount} from "../helpers.js";
-import HRequest from "../http/request.js";
 
+/**
+ * @typedef {import("../route/route.js").default} Route
+ * @typedef {import("../http/request.js").default} HRequest
+ * @typedef {import("../http/response.js").default} HResponse
+ */
 const reflect = window.Reflect ? Reflect : {has: (cl, k) => k in cl};
 
 /**
@@ -12,17 +16,16 @@ function method_exists(obj, key) {
     return reflect.has(obj, key) && typeof obj[key] === 'function';
 }
 
-/**
- *
- * @typedef {Object} ContainerDef
- * @property {View} view
- * @property {DBModel} storage
- */
 
 /**
- *
- * @param {Function} controller instance controller class
- * @param {...ContainerDef} container container app {@link ContainerDef} object
+ * @memberof Dispatcher
+ * @private 
+ * @typedef {Object} ContainerDef
+ * @property {object} view
+ * @property {object} storage
+ * @param {object} controller instance controller class
+ * @param {ContainerDef} container container app {@link ContainerDef} object
+ * @param {string} method
  */
 function dispatchController(controller, container, method) {
     if (typeof controller.__proto__ === 'function' && typeof controller.__proto__.prototype !== 'undefined') {
@@ -61,21 +64,22 @@ function object_union(keys, vals) {
 }
 
 /**
- * @version 0.1.0
+ * @class Dispatcher
+ * @version 0.2.0
  */
-export default class Dispacther {
+export default class Dispatcher {
 
     /**
-     *
-     * @param {Patron} app
      * @param {HRequest} req
+     * @param {HResponse} res
+     * @param {object} container
      */
-    constructor(app, req) {
-        this.container = app.container;
-        this.routers = app.actions;
+    constructor(req, res, container = {}) {
         this.request = req;
+        this.response = res;
+        this.container = container;
 
-        this.catch = ()=> {
+        this.catch = () => {
             this.page = page_not_fount;
             this.html = document.body.innerHTML;
             document.body.innerHTML = '';
@@ -83,19 +87,18 @@ export default class Dispacther {
         };
     }
 
-    /**
-     * @param {Function} func_error function to execute when not fount url
-     */
-    notFound(func_error) {
-        this.catch = func_error;
-    }
 
     /**
      * initialize app
+     * @param {Array<object>} routers
+     * @param {Function} _catch
      */
-    send() {
+    send(routers, _catch) {
+        /**
+         * @type {any}
+         */
         let val_params = [];
-        for (const router of this.routers) {
+        for (const router of routers) {
             if ((val_params = match_url(router.path.url, this.request.url))) {
                 this.request.params = object_union(router.path.name_params, val_params);
                 //- remove page not found
@@ -111,12 +114,13 @@ export default class Dispacther {
         }
 
         // show page not fount
-        this.catch();
+        _catch ? _catch() : this.catch();
     }
 
     /**
-     *
-     * @param {object} data values of router
+     * ejecuta el controlador actual
+     * @param {{option: object | function, method: string}} data values of router
+     * @throws {Error}
      */
     execute(data) {
         let option = data.option;
@@ -146,36 +150,38 @@ export default class Dispacther {
     }
 
     /**
-     * @return {Dispacther}
+     * @return {Dispatcher}
      */
     getInstance() {
-        return Dispacther._instance;
+        return Dispatcher._instance;
     }
 
     /**
-     * create instance class
-     * @param {Patron} app
      * @param {HRequest} req
+     * @param {HResponse} res
+     * @param {object} container
      */
-    static createInstance(app, req){
-        if (!Dispacther._instance)
-            Dispacther._instance = new Dispacther(app, req);
-        return Dispacther._instance;
+    static createInstance(req, res, container){
+        if (!Dispatcher._instance)
+            Dispatcher._instance = new Dispatcher(req, res, container);
+        return Dispatcher._instance;
     }
 
     /**
      * @description return instance class
-     * @return {Dispacther}
+     * @return {Dispatcher}
      */
     static get instance(){
-        return Dispacther._instance;
+        return Dispatcher._instance;
     }
 
     /**
      * @description set instance class
-     * @param {Dispacther}
+     * @param {Dispatcher} obj
      */
     static set instance(obj) {
-        Dispacther._instance = obj;
+        Dispatcher._instance = obj;
     }
 }
+
+Dispatcher._instance = undefined;

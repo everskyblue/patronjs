@@ -1,7 +1,8 @@
 import { setEvaluatorCode, output } from "./evaluate.js";
 import { get_text_script, get_style } from "./scope.js";
 import { getStructList, todo } from "./analyzer.js";
-
+import { reader } from "./fs/read";
+import { parserImport } from "./analyzer/import";
 /**
  * @since 0.3.0
  * @param {HTMLElement} node 
@@ -13,6 +14,7 @@ export function set_scope_styles(node, styles) {
         if (select_nodes.length>0) {
             select_nodes.forEach(elm => {
                 for (const property in styles[selector]) {
+                    // @ts-ignore
                     elm.style[property] = styles[selector][property];
                 }
             })
@@ -64,7 +66,7 @@ export function updateProps(data) {
  * @since 0.3.0
  * @param {string} content source
  * @param {object} data
- * @return {NodeList}
+ * @return {HTMLElement}
  */
 export function parse(content, data) {
     let node = document.createElement('div');
@@ -83,4 +85,18 @@ export function parse(content, data) {
     set_scope_styles(node, styles);
     
     return node;
+}
+
+/**
+ * @param {string} sourcejs
+ * @param {any} data
+ */
+function templates(sourcejs, data) {
+    const map = parserImport(sourcejs);
+
+    if (map.imports.length > 0) {
+        map.imports.forEach(async (mapimport) => {
+            reader(mapimport.modulePath)
+        });
+    }
 }

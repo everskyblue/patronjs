@@ -10,9 +10,7 @@ import { addCache, addCachedItems, getCache, isCaching } from "./fs/cache-file.j
 export class ViewConfig {
     /**
      * @constructor
-     * @param {String} path
-     * @param {String} ext
-     * @param {String} join element where in view
+     * @param {{path: string,ext: string,join: string,isCaching:boolean}} config
      */
     constructor({ path = '', ext = '.html', join = '', isCaching = true }) {
         this.path = path;
@@ -102,7 +100,7 @@ export class View {
     }
 
     /**
-     * @return {boolean}
+     * @return {void}
      */
     storeDOM(file = false) {
         if (typeof this.abs_file === 'string') {

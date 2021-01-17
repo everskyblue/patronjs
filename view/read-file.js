@@ -6,10 +6,11 @@
  /**
   * @description interfaz de respuesta
   */
-class ResponseReader {
+export class ResponseReader {
     constructor() {
         this.error = false;
         this.content = '';
+        this.status = null;
     }
 }
 

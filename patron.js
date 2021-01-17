@@ -4,7 +4,7 @@ import HRequest from "./http/request.js";
 import HResponse from "./http/response.js";
 import Route from "./route/route.js";
 import { View, ViewConfig } from "./view/view.js";
-import Dispacther from "./route/dispatcher.js";
+import Dispatcher from "./route/dispatcher.js";
 import { template_logger, setUtilLocation } from "./helpers.js";
 
 /**
@@ -55,20 +55,18 @@ export default class Patron extends Route {
     }
 
     /**
-     * 
-     * @param {HRequest} request 
-     * @return {Dispacther}
+     * @param {HRequest} request
+     * @return {Dispatcher}
+     * @param {function} callback404
      */
-    run(request) {
-        /**
-         * @type {Dispacther}
-         */
-        const dispatcher = Dispacther.createInstance(
-            this,
-            request
+    run(request, callback404) {
+        const dispatcher = Dispatcher.createInstance(
+            request,
+            this.container.response,
+            this.container
         );
 
-        dispatcher.send();
+        dispatcher.send(this.actions, callback404);
 
         return dispatcher;
     }
