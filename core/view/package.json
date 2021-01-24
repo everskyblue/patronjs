@@ -1,0 +1,5 @@
+{
+    "name": "jspatron/view",
+    "main": "../outlib/view/view.js",
+    "typings": "../typings/empty.d.ts"
+}
