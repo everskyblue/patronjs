@@ -1,0 +1,27 @@
+{
+  "name": "patron-installer",
+  "version": "1.0.0",
+  "description": "installer of the patronjs framework",
+  "main": "install.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "patron-installer": "./install.js"
+  },
+  "dependencies": {
+    "download-git-repo": "3.0.2"
+  },
+  "keywords": [
+    "jspatron",
+    "patronjs",
+    "patron-install",
+    "framework",
+    "spa",
+    "patron",
+    "router",
+    "route"
+  ],
+  "author": "Nike Madrid",
+  "license": "MIT"
+}
