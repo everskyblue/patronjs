@@ -4,9 +4,9 @@
   "description": "core functionality of patronjs",
   "main": "outlib/app/index.js",
   "scripts": {
-    "start": "webpack --mode production",
-    "dev": "webpack --mode development",
-    "babel": "babel --config-file ./.babelrc --out-dir ./outlib ./"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview" 
   },
   "repository": {
     "type": "git",
@@ -28,11 +28,7 @@
   "homepage": "https://github.com/everskyblue/patronjs#readme",
   "dependencies": {},
   "devDependencies": {
-    "@babel/core": "7.12.3",
-    "@babel/plugin-transform-async-to-generator": "7.12.1",
-    "@babel/plugin-transform-runtime": "7.12.1",
-    "@babel/preset-env": "7.12.1",
-    "babel-loader": "8.1.0"
+    "vite": "3.0.2"
   },
   "typings": "./typings/index.d.ts"
 }
