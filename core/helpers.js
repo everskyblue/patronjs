@@ -1,4 +1,9 @@
+import { getContainer } from "./container";
+
 let base_url, assets_location;
+
+const ApiPattern = (this||globalThis).URLPattern;
+const existsApiPattern = ApiPattern !== undefined || ApiPattern !== null;
 
 export function setUtilLocation(ubase, lassets) {
     base_url = ubase;
@@ -22,12 +27,34 @@ export function pregQuote(str, rpl) {
  *
  * @param {string} url
  * @param {string} compare
+ * @returns {boolean|{input: string, params: string[]}}
  */
 export function match_url(url, compare) {
-    const rgx = new RegExp(pregQuote(url, '/')+'/?$');
-    const f = rgx.exec(compare);
+    const config = getContainer().config;
+    const pattern = existsApiPattern
+        ? new ApiPattern(url, config.base_url)
+        : new RegExp(pregQuote(url, '/')+'/?$');
+    const args = [compare];
 
-    return f && f.shift() === f.input ? f : false;
+    if (existsApiPattern) {
+        args.push(config.base_url);
+    }
+
+    const match = pattern.exec(...args);
+
+    if (match === null) return false;
+
+    let result = {input: '', params: []};
+    if (existsApiPattern) {
+        const {input, groups} = match.pathname;
+        result.input = input;
+        result.params.push(...Object.values(groups));
+    } else {
+        if (match.input !== match.shift()) return false;
+        result.input = match.input;
+        result.params.push(...match);
+    }
+    return result;
 }
 
 /**
@@ -45,6 +72,7 @@ export function parse_url(url) {
  * @param {Array} files
  */
 export function load_assets(type, files) {
+    const {base_url, assets_location} = getContainer().config;
     const root = assets_location[type];
     for (const file of files) {
         let e;

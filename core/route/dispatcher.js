@@ -125,10 +125,10 @@ export default class Dispatcher {
      */
     send() {
         for (const router of this.routers) {
-            let val_params= match_url(router.path.url, this.request.url);
-            if (val_params !== false) {
-                this.request.params = object_union(router.path.name_params, val_params);
-                this.stateView(val_params.input);
+            let result= match_url(router.path.url, this.request.url);
+            if (result !== false) {
+                this.request.params = object_union(router.path.name_params, result.params);
+                this.stateView(result.input);
                 return this.execute(router);
             }
         }
