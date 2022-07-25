@@ -16,6 +16,19 @@ function method_exists(obj, key) {
     return reflect.has(obj, key) && typeof obj[key] === 'function';
 }
 
+function appendView(vw, container) {
+    if (vw instanceof Promise) {
+        vw.then(CacheSystem => {
+            for (let i = 0, len = CacheSystem.parsed_element.childNodes.length, a = 0; i < len; i++) {
+                container.view.elm_container.appendChild(CacheSystem.parsed_element.childNodes[a]);
+            }
+        });
+    } else if (Array.isArray(vw) || typeof vw === 'object') {
+        container.view.innerContent(JSON.stringify(vw));
+    } else if (typeof vw !== 'undefined') {
+        container.view.innerContent(vw);
+    }
+}
 
 /**
  * @memberof Dispatcher
@@ -34,21 +47,16 @@ function dispatchController(controller, container, method) {
         }
     }
 
-    const $class = new controller(container);
+    const isClass = controller.toString().substring(0, 5) === 'class';
+    const $class = isClass ? new controller(container) : controller(container);
 
-    if (method_exists($class, method)) {
-        const vw =  $class[method]();
-        if (vw instanceof Promise) {
-            vw.then(CacheSystem => {
-                for (let i = 0, len = CacheSystem.parsed_element.childNodes.length, a = 0; i < len; i++) {
-                    container.view.elm_container.appendChild(CacheSystem.parsed_element.childNodes[a]);
-                }
-            });
-        } else if (Array.isArray(vw) || typeof vw === 'object') {
-            container.view.innerContent(JSON.stringify(vw));
-        } else if (typeof vw !== 'undefined') {
-            container.view.innerContent(vw);
+    if (isClass) {
+        if (!method_exists($class, method)) {
+            throw new Error('method not exists');
         }
+        appendView($class[method](), container);
+    } else {
+        appendView($class, container)
     }
 }
 
@@ -62,12 +70,18 @@ function object_union(keys, vals) {
     keys.forEach((key, indx) => (newObject[key] = vals[indx]));
     return newObject;
 }
+/**
+ * @type {Dispatcher}
+ */
+let instanceDispatcher;
 
 /**
  * @class Dispatcher
  * @version 0.2.0
  */
 export default class Dispatcher {
+
+    static _instance = null;
 
     /**
      * @param {HRequest} req
@@ -78,43 +92,47 @@ export default class Dispatcher {
         this.request = req;
         this.response = res;
         this.container = container;
-
-        this.catch = () => {
+        this.setNotFount(() => {
             this.page = page_not_fount;
             this.html = document.body.innerHTML;
             document.body.innerHTML = '';
             document.body.appendChild(page_not_fount);
-        };
+        });
     }
 
+    /**
+     * 
+     * @param {Array<object>} routers 
+     * @return {Dispatcher}
+     */
+    setRouters(routers) {
+        this.routers = routers;
+        return this;
+    }
+
+    /**
+     * 
+     * @param {Function} _catch 
+     * @return {Dispatcher}
+     */
+    setNotFount(_catch) {
+        this.catch = _catch;
+        return this;
+    }
 
     /**
      * initialize app
-     * @param {Array<object>} routers
-     * @param {Function} _catch
      */
-    send(routers, _catch) {
-        /**
-         * @type {any}
-         */
-        let val_params = [];
-        for (const router of routers) {
-            if ((val_params = match_url(router.path.url, this.request.url))) {
+    send() {
+        for (const router of this.routers) {
+            let val_params= match_url(router.path.url, this.request.url);
+            if (val_params !== false) {
                 this.request.params = object_union(router.path.name_params, val_params);
-                //- remove page not found
-                if (typeof this.html === 'string') {
-                    this.page.remove();
-                    document.body.innerHTML = this.html;
-                    delete this.html;
-                }
-
                 this.stateView(val_params.input);
                 return this.execute(router);
             }
         }
-
-        // show page not fount
-        _catch ? _catch() : this.catch();
+        this.catch(); // show page not fount
     }
 
     /**
@@ -122,10 +140,8 @@ export default class Dispatcher {
      * @param {{option: object | function, method: string}} data values of router
      * @throws {Error}
      */
-    execute(data) {
-        let option = data.option;
-        let method = data.method;
-        if (typeof option  == 'object') {
+    execute({option, method}) {
+        if (typeof option === 'object') {
             if (option.load && option.load.css) load_assets('css', option.load.css);
             if (option.load && option.load.js) load_assets('js', option.load.js);
             option = option.controller;
@@ -142,6 +158,13 @@ export default class Dispatcher {
      * @param {string} current_url 
      */
     stateView(current_url) {
+        //- remove page not found
+        if (typeof this.html === 'string') {
+            this.page.remove();
+            document.body.innerHTML = this.html;
+            delete this.html;
+        }
+        
         document.querySelectorAll('[data-remove]').forEach(node => {
             if (['style', 'script'].includes(node.tagName.toLowerCase())) node.remove(); 
         });
@@ -153,18 +176,19 @@ export default class Dispatcher {
      * @return {Dispatcher}
      */
     getInstance() {
-        return Dispatcher._instance;
+        return instanceDispatcher;
     }
 
     /**
      * @param {HRequest} req
      * @param {HResponse} res
      * @param {object} container
+     * @return {Dispatcher}
      */
     static createInstance(req, res, container){
-        if (!Dispatcher._instance)
-            Dispatcher._instance = new Dispatcher(req, res, container);
-        return Dispatcher._instance;
+        if (!Dispatcher.instance)
+            Dispatcher.instance = new Dispatcher(req, res, container);
+        return Dispatcher.instance;
     }
 
     /**
@@ -172,7 +196,7 @@ export default class Dispatcher {
      * @return {Dispatcher}
      */
     static get instance(){
-        return Dispatcher._instance;
+        return instanceDispatcher;
     }
 
     /**
@@ -180,8 +204,6 @@ export default class Dispatcher {
      * @param {Dispatcher} obj
      */
     static set instance(obj) {
-        Dispatcher._instance = obj;
+        instanceDispatcher = obj;
     }
 }
-
-Dispatcher._instance = undefined;

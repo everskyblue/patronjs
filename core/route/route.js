@@ -37,6 +37,7 @@ export default class Route {
      * @param {String} url 
      * @param {Function} option 
      * @param {String} method
+     * @return {Route}
      */
     hash(url, option, method) {
         const path = this.pattern.resolverCondition(this._group+url)
@@ -46,5 +47,7 @@ export default class Route {
             option,
             method
         });
+
+        return this;
     }
 }

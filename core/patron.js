@@ -7,27 +7,6 @@ import { View, ViewConfig } from "./view/view.js";
 import Dispatcher from "./route/dispatcher.js";
 import { template_logger, setUtilLocation } from "./helpers.js";
 
-/**
- * 
- * @param {Object} config 
- */
-function register(config) {
-    setContainer('view', function (/*container*/) {
-        return new View(new ViewConfig(config.cview));
-    });
-
-    setContainer('cookie', function () {
-        return new Cookie();
-    });
-    
-    setContainer('request', function () {
-        return new HRequest();
-    });
-
-    setContainer('response', function (container) {
-        return new HResponse(container);
-    });
-}
 
 /**
  * @class
@@ -42,16 +21,45 @@ export default class Patron extends Route {
         super();
         this.debug = config.debug;
         setUtilLocation(config.base_url, config.assets_location);
-        register(config);
+        setContainer('config', ()=> ({...config}));
     }
 
     /**
      * 
+     * @returns {Patron}
+     */
+    registerContainer() {
+        setContainer('view', container => new View(new ViewConfig(container.config.cview)));
+        setContainer('cookie', () =>new Cookie());
+        return this;
+    }
+
+    /**
+     * 
+     * @returns {Patron}
+     */
+    registerContainerRequest() {
+        setContainer('request', () => new HRequest());
+        return this;
+    }
+
+    /**
+     * 
+     * @returns {Patron}
+     */
+     registerContainerResponse() {
+        setContainer('response', container =>  new HResponse(container));
+        return this;
+    }
+    /**
+     * 
      * @param {String} key 
      * @param {Function} func 
+     * @returns {Patron}
      */
     setContainer(key, func) {
         setContainer(key, func);
+        return this;
     }
 
     /**
@@ -59,14 +67,17 @@ export default class Patron extends Route {
      * @return {Dispatcher}
      * @param {function} callback404
      */
-    run(request, callback404) {
+    run(callback404) {
         const dispatcher = Dispatcher.createInstance(
-            request,
+            this.container.request,
             this.container.response,
             this.container
         );
-
-        dispatcher.send(this.actions, callback404);
+        
+        dispatcher
+            .setNotFount(callback404??dispatcher.catch)
+            .setRouters(this.actions)
+            .send();
 
         return dispatcher;
     }
