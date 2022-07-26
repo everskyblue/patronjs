@@ -93,10 +93,11 @@ export default class Dispatcher {
         this.response = res;
         this.container = container;
         this.setNotFount(() => {
-            this.page = page_not_fount;
+            const iframe = page_not_fount();
+            this.page = iframe;
             this.html = document.body.innerHTML;
             document.body.innerHTML = '';
-            document.body.appendChild(page_not_fount);
+            document.body.appendChild(iframe);
         });
     }
 

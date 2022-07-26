@@ -1,4 +1,4 @@
-import { getContainer } from "./container";
+import { getContainer } from "./container.js";
 
 let base_url, assets_location;
 
@@ -111,16 +111,19 @@ export function comparator(value, operator, to) {
 }
 
 /**
- * @type {HTMLIFrameElement}
+ * @return {HTMLIFrameElement}
  */
-export const page_not_fount = document.createElement('iframe');
-page_not_fount.allow = 'fullscreen';
-page_not_fount.width = '100%';
-page_not_fount.height = '100%';
-page_not_fount.src = '/public/404.html';
-page_not_fount.style.position = 'absolute';
-page_not_fount.style.border = '0';
-page_not_fount.style.zIndex = '100';
+export const page_not_fount = ()=> {
+    const public_dir = getContainer().config.public_dir
+    const iframe = document.createElement('iframe');
+    iframe.allow = 'fullscreen';
+    iframe.width = '100%';
+    iframe.height = '100%';
+    iframe.src = `${public_dir}/404.html`;
+    iframe.style.position = 'absolute';
+    iframe.style.border = '0';
+    iframe.style.zIndex = '100';return iframe;
+}
 
 let style_log = `
 <style>

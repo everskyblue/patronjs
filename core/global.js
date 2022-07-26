@@ -3,4 +3,4 @@ import * as http from "./http/todo.js"
 import * as route from "./route/todo.js"
 import view from "./view/todo.js"
 
-export const Patron = {App, URLStateCapture, http, route, view};
+export default {App, URLStateCapture, http, route, view};

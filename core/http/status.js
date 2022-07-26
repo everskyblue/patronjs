@@ -76,54 +76,44 @@ export const STATUS = {
     530: 'User access denied'
 };
 
-export function isInfo() {
-    return this.code >= 100 && this.code <= 102;
-}
+class Status {
+    code = 200;
 
-export function isSuccess() {
-    return this.code >= 200 && this.code <= 207;
-}
-
-export function isRedirection() {
-    return this.code >= 300 && this.code <= 308;
-}
-
-export function isServerError() {
-    return this.code >= 400 && this.code <= 498;
-}
-
-export function isClientError() {
-    return this.code >= 500 && this.code <= 530;
-}
-
-export function exists_status(code) {
-    return (code in STATUS);
-}
-
-export function getMessageStatus(code) {
-    if (!exists_status(code)) {
-        throw new Error(`code ${code} status no exists`);
+    isRedirection() {
+        return this.code >= 300 && this.code <= 308;
     }
-    return status[code];
-}
 
-export function isOK() {
-    return this.code === 200;
-}
+    isOK() {
+        return this.code === 200;
+    }
 
-function Status () {
-    this.code = 200;
-}
+    getMessageStatus(code) {
+        if (!exists_status(code)) {
+            throw new Error(`code ${code} status no exists`);
+        }
+        return STATUS[code];
+    }
 
-Status.prototype = {
-    STATUS,
-    isOK,
-    isInfo,
-    isSuccess,
-    isClientError,
-    isRedirection,
-    isServerError,
-    getMessageStatus
-};
+    isInfo() {
+        return this.code >= 100 && this.code <= 102;
+    }
+
+    isSuccess() {
+       
+        return this.code >= 200 && this.code <= 207;
+    }
+    
+    isServerError() {
+        return this.code >= 400 && this.code <= 498;
+    }
+
+    isClientError() {
+        return this.code >= 500 && this.code <= 530;
+    }
+
+    exists_status(code) {
+        return (code in STATUS);
+    }
+}
 
 export default Status;
