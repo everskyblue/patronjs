@@ -4,10 +4,13 @@ export const debug = true;
 // url base for location view, database
 export const base_url = location.origin;
 
+// public directory
+export const public_dir = `${base_url}/skeleton/public`;
+
 // location assets
 export const assets_location= {
-    js: '/public/assets/js/',
-    css: '/public/assets/css/'
+    js: `${public_dir}/assets/js/`,
+    css: `${public_dir}/assets/css/`
 };
 
 /**
