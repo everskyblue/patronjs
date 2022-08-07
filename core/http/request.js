@@ -8,7 +8,7 @@ export default class HRequest {
      * @constructor
      */
     constructor() {
-        this.port = Number(location.port || 80);
+        this.port = Number(location.port || this.isHTTPS() ? 443 : this.isHTTP() ? 80 : undefined);
         this.host = location.hostname;
         this.params = {};
         this.search = this.getQuerySearch();

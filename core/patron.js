@@ -65,7 +65,7 @@ export default class Patron extends Route {
     /**
      * @param {HRequest} request
      * @return {Dispatcher}
-     * @param {function} callback404
+     * @param {Function} callback404
      */
     run(callback404) {
         const dispatcher = Dispatcher.createInstance(

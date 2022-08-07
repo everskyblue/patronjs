@@ -1,26 +1,31 @@
 import RoutePattern from './route-pattern.js';
+import '../types.js'
 
 /**
  * @class
- * @version 0.1.0
- * @property {RoutePattern} pattern
- * @property {String} _group
- * @property {Array} actions
+ * @version 0.2.0
  */
 export default class Route {
     /**
-     * @constructor
+     * @type {string}
      */
-    constructor() {
-        this._group = '';
-        this.pattern = new RoutePattern();
-        this.actions = [];
-    }
+    _group = '';
+
+    /**
+     * @type {RouteAction[]}
+     */
+    actions = [];
+
+    /**
+     * @type {RoutePattern}
+     */
+    pattern =  new RoutePattern();
     
     /**
-     * 
+     * url groups
      * @param {String} url 
-     * @param {Function} fn 
+     * @param {(context: Route)=> any} fn 
+     * @return {Route}
      */
     group(url, fn) {
         this._group = url;
@@ -30,17 +35,19 @@ export default class Route {
         fn(this);
         
         this._group = '';
+
+        return this;
     } 
-    
+
     /**
      * define route
      * @param {String} url 
-     * @param {Function} option 
-     * @param {String} method
+     * @param {Function|OptionRoute} option 
+     * @param {String|undefined} method optional parameter, name method of the function
      * @return {Route}
      */
     hash(url, option, method) {
-        const path = this.pattern.resolverCondition(this._group+url)
+        const path = this.pattern.resolverCondition(this._group.concat(url))
 
         this.actions.push({
             path,
