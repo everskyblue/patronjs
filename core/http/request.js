@@ -1,17 +1,16 @@
 import {parse_url} from '../helpers.js';
 
 /**
- * @version 0.1.0
+ * @version 0.1.2
  */
 export default class HRequest {
     /**
      * @constructor
      */
     constructor() {
-        this.port = Number(location.port || this.isHTTPS() ? 443 : this.isHTTP() ? 80 : undefined);
+        this.port = Number(location.port) || this.isHTTPS() ? 443 : this.isHTTP() ? 80 : undefined;
         this.host = location.hostname;
         this.params = {};
-        this.search = this.getQuerySearch();
         this.agent = navigator.userAgent;
     }
 
@@ -34,14 +33,21 @@ export default class HRequest {
      * @return {boolean}
      */
     isHTTP() {
-        return location.protocol.substr(0, location.protocol.length - 1) === 'http';
+        return location.protocol.substring(0, location.protocol.length - 1) === 'http';
     }
 
     /**
      * @return {boolean}
      */
     isHTTPS() {
-        return location.protocol.substr(0, location.protocol.length - 1) === 'https';
+        return location.protocol.substring(0, location.protocol.length - 1) === 'https';
+    }
+
+    /**
+     * @return {object}
+     */
+    get search() {
+        return this.getQuerySearch();
     }
 
     /**
@@ -52,7 +58,7 @@ export default class HRequest {
     }
 
     get hash() {
-        const url = parse_url(location.hash.substr(1) || '/');
+        const url = parse_url(location.hash.substring(1) || '/');
         return url.pathname;
     }
 }

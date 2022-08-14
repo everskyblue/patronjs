@@ -88,7 +88,7 @@ class Status {
     }
 
     getMessageStatus(code) {
-        if (!exists_status(code)) {
+        if (!this.exists_status(code)) {
             throw new Error(`code ${code} status no exists`);
         }
         return STATUS[code];
