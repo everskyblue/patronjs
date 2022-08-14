@@ -1,11 +1,11 @@
-import {match_url, load_assets, page_not_fount} from "../helpers.js";
+import { match_url, load_assets, page_not_fount, template_logger } from "../helpers.js";
 
 /**
  * @typedef {import("../route/route.js").default} Route
  * @typedef {import("../http/request.js").default} HRequest
  * @typedef {import("../http/response.js").default} HResponse
  */
-const reflect = window.Reflect ? Reflect : {has: (cl, k) => k in cl};
+const reflect = window.Reflect ? Reflect : { has: (cl, k) => k in cl };
 
 /**
  *
@@ -16,48 +16,41 @@ function method_exists(obj, key) {
     return reflect.has(obj, key) && typeof obj[key] === 'function';
 }
 
-function appendView(vw, container) {
-    if (vw instanceof Promise) {
-        vw.then(CacheSystem => {
-            for (let i = 0, len = CacheSystem.parsed_element.childNodes.length, a = 0; i < len; i++) {
-                container.view.elm_container.appendChild(CacheSystem.parsed_element.childNodes[a]);
-            }
-        });
-    } else if (Array.isArray(vw) || typeof vw === 'object') {
-        container.view.innerContent(JSON.stringify(vw));
-    } else if (typeof vw !== 'undefined') {
-        container.view.innerContent(vw);
-    }
-}
-
 /**
  * @memberof Dispatcher
  * @private 
  * @typedef {Object} ContainerDef
  * @property {object} view
  * @property {object} storage
- * @param {object} controller instance controller class
+ * @param {object} Controller instance controller class
  * @param {ContainerDef} container container app {@link ContainerDef} object
  * @param {string} method
  */
-function dispatchController(controller, container, method) {
-    if (typeof controller.__proto__ === 'function' && typeof controller.__proto__.prototype !== 'undefined') {
-        if (controller.__proto__.name === 'Controller') {
-            Object.setPrototypeOf(controller.__proto__.prototype, container);
+function dispatchController(Controller, container, method) {
+    if (typeof Controller.__proto__ === 'function' && typeof Controller.__proto__.prototype !== 'undefined') {
+        if (Controller.__proto__.name === 'Controller') {
+            Object.setPrototypeOf(Controller.__proto__.prototype, container);
         }
     }
 
-    const isClass = controller.toString().substring(0, 5) === 'class';
-    const $class = isClass ? new controller(container) : controller(container);
-
-    if (isClass) {
-        if (!method_exists($class, method)) {
-            throw new Error('method not exists');
+    try {
+        const isClass = Controller.toString().substring(0, 5) === 'class';
+        const $class = isClass ? new Controller(container) : Controller(container);
+        let data = isClass ? '' : $class;
+        if (isClass) {
+            if (!method_exists($class, method)) {
+                throw new Error('method not exists');
+            }
+            data = $class[method]();
         }
-        appendView($class[method](), container);
-    } else {
-        appendView($class, container)
+
+        container.response.send(data);
+    } catch (error) {
+        if (container.config.debug) {
+            template_logger(error)
+        }
     }
+
 }
 
 /**
@@ -80,8 +73,6 @@ let instanceDispatcher;
  * @version 0.2.0
  */
 export default class Dispatcher {
-
-    static _instance = null;
 
     /**
      * @param {HRequest} req
@@ -126,7 +117,7 @@ export default class Dispatcher {
      */
     send() {
         for (const router of this.routers) {
-            let result= match_url(router.path.url, this.request.url);
+            let result = match_url(router.path.url, this.request.url);
             if (result !== false) {
                 this.request.params = object_union(router.path.name_params, result.params);
                 this.stateView(result.input);
@@ -141,7 +132,7 @@ export default class Dispatcher {
      * @param {{option: object | function, method: string}} data values of router
      * @throws {Error}
      */
-    execute({option, method}) {
+    execute({ option, method }) {
         if (typeof option === 'object') {
             if (option.load && option.load.css) load_assets('css', option.load.css);
             if (option.load && option.load.js) load_assets('js', option.load.js);
@@ -165,9 +156,16 @@ export default class Dispatcher {
             document.body.innerHTML = this.html;
             delete this.html;
         }
+
+        const data_rm = document.querySelectorAll('[data-remove]');
+        const handle = document.querySelectorAll('[patron-handle]');
+
+        if (handle.length > 0) {
+            location.reload();
+        }
         
-        document.querySelectorAll('[data-remove]').forEach(node => {
-            if (['style', 'script'].includes(node.tagName.toLowerCase())) node.remove(); 
+        data_rm.forEach(node => {
+            if (['style', 'script', 'link'].includes(node.tagName.toLowerCase())) node.remove();
         });
 
         this.container.view.storeDOM(current_url);
@@ -186,7 +184,7 @@ export default class Dispatcher {
      * @param {object} container
      * @return {Dispatcher}
      */
-    static createInstance(req, res, container){
+    static createInstance(req, res, container) {
         if (!Dispatcher.instance)
             Dispatcher.instance = new Dispatcher(req, res, container);
         return Dispatcher.instance;
@@ -196,7 +194,7 @@ export default class Dispatcher {
      * @description return instance class
      * @return {Dispatcher}
      */
-    static get instance(){
+    static get instance() {
         return instanceDispatcher;
     }
 
