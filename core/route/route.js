@@ -29,13 +29,8 @@ export default class Route {
      */
     group(url, fn) {
         this._group = url;
-
-        if (!url.endsWith('/')) this._group += '/';
-        
         fn(this);
-        
         this._group = '';
-
         return this;
     } 
 
@@ -48,7 +43,7 @@ export default class Route {
      */
     hash(url, option, method) {
         const path = this.pattern.resolverCondition(this._group.concat(url))
-
+        
         this.actions.push({
             path,
             option,

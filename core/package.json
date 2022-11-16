@@ -3,6 +3,7 @@
   "version": "0.9.2",
   "description": "core functionality of patronjs",
   "main": "outlib/app/index.js",
+  "module": "patron.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

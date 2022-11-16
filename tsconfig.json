@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "target": "ESNext",
+        "jsx": "react",
+        "jsxFactory": "Reactive.createElement",
+        "jsxFragmentFactory": "Reactive.Fragment",
+        "lib": ["DOM", "ESNext"],
+        "paths": {
+            "patron/*": ["./core/*", "./core/patron.js"],
+            "@controllers/*": ["skeleton/app/controllers/*"],
+            "@views/*": ["./skeleton/views/*"],
+            "@assets": ["./skeleton/public/assets/*"]
+        },
+        "types": ["string-tocapitalize"],
+        "plugins": [{ "name": "typescript-plugin-css-modules" }],
+        "allowJs": false
+    },
+    "exclude": ["node_modules","cli-create-app", "dist"]
+}

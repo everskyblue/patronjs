@@ -32,10 +32,10 @@ export function pregQuote(str, rpl) {
 export function match_url(url, compare) {
     const config = getContainer().config;
     const pattern = existsApiPattern
-        ? new ApiPattern(url, config.base_url)
+        ? new ApiPattern(`${url}(\\/?)`, config.base_url)
         : new RegExp(pregQuote(url, '/')+'/?$');
     const args = [compare];
-
+    
     if (existsApiPattern) {
         args.push(config.base_url);
     }
@@ -72,18 +72,18 @@ export function parse_url(url) {
  * @param {Array} files
  */
 export function load_assets(type, files) {
-    const {base_url, assets_location} = getContainer().config;
+    const {assets_location} = getContainer().config;
     const root = assets_location[type];
     for (const file of files) {
         let e;
         if (type === 'css') {
             e = document.createElement('link');
-            e.href = `${base_url}${root}${file}.css`;
+            e.href = `${root}${file}.css`;
             e.rel = 'stylesheet'
             document.head.appendChild(e);
         } else if (type === 'js') {
             e = document.createElement('script');
-            e.src = `${base_url}${root}${file}.js`;
+            e.src = `${root}${file}.js`;
             document.body.appendChild(e);
         }
 
@@ -122,51 +122,90 @@ export const page_not_fount = ()=> {
     iframe.src = `${public_dir}/404.html`;
     iframe.style.position = 'absolute';
     iframe.style.border = '0';
-    iframe.style.zIndex = '100';return iframe;
+    iframe.style.zIndex = '100';
+    return iframe;
 }
 
-let style_log = `
-<style>
-h2.err-msg {
-    background: #3F51B5;
-    padding: 10px;
-    color: #d5e812;
-}
-h4{
-    font-size: xx-large;
-    margin-bottom: 10px;
-}
-.err-stacks {
-    padding: 10px;
-    line-height: 25px;
-}
-.stack {
-    border: 5px dashed #c72e2e;
-    padding: 10px;
-    color: #0e3ce4;
-    text-decoration: underline;
-    border-style: double;
-    counter-reset: errs;
-}
-.stack > div:before {
-    counter-increment: errs;
-    content: counters(errs,".") " ";
-}
-</style>
-`;
 /**
  * 
  * @param {Error} e 
  */
 export function template_logger(e) {
-    const errs = e.stack.split('\n');
-    const msg = `<h2 class="err-msg">${errs.shift()}</h2>`;
-    let stacks = `
-        <div class="err-stacks">
-            <h4>Stacks:</h4>
-            <div class="stack">`;
-    for (const err of errs) stacks += `<div>${err.trim()}</div>`;
-    stacks += '</div></div>';
-    document.title = 'error application';
-    document.body.innerHTML = `${style_log}\n<div class="debug">${msg}${stacks}</div>`;
+    if (!(e instanceof Error) || Object.prototype.toString.call(e) === '[object Object]') {
+        e = new Error(typeof e === 'object' ? JSON.stringify(e) : e);
+    }
+
+    if (!window.hljs) {
+        const script = document.createElement('script')
+        const scriptNumber = document.createElement('script')
+        const link = document.createElement('link')
+        scriptNumber.src = '//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js';
+        script.src = 'https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js';
+        link.rel = 'stylesheet'; link.href = 'https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/androidstudio.min.css';
+        document.head.append(script,link);
+        script.onload = ()=> document.head.append(scriptNumber);
+        addAttributes(script, scriptNumber, link);
+    }
+
+    const style = document.createElement('link')
+    const script = document.createElement('script')
+    style.href = import.meta.url.substring(0, import.meta.url.lastIndexOf('/')) + '/styles.css';
+    script.src = import.meta.url.substring(0, import.meta.url.lastIndexOf('/')) + '/error-fetch-template.js';
+    style.rel = 'stylesheet'
+    addAttributes(style, script)
+    document.head.append(style, script);
+
+    const stacks = e.stack.split('\n').slice(1);
+    const tpl = `
+    <h1 class="error-title">Error Application</h1>
+    <div id="error-container">
+        <section class="error-info">
+            <div class="type-error-info">
+                <p class="type-error"><b class="color-primary">Error Name:</b> ${e.name}</p>
+            </div>
+            <div class="message-error-info">
+                <p class="message-error"><b class="color-primary">Message:</b> ${e.message}</p>
+            </div>
+        </section>
+        <section class="view-code">
+            <div><pre class="show-code"><p class="text-empty-preview">preview code</p></pre></div>
+        </section>
+        <section class="error-stacks error-stacks-content">
+            <div class="error-stacks-info">${stringStacks(stacks)}</div>
+        </section>
+    </div>
+    `;
+
+    document.title = 'Error Application';
+    style.onload = ()=> document.body.innerHTML = tpl;
+}
+
+/**
+ * 
+ * @param  {...HTMLElement} elements 
+ */
+ function addAttributes(...elements) {
+    elements.forEach(element => {
+        element.setAttribute('patron-handle', '');
+    });
+}
+
+function stringStacks(stacks) {
+    let html = '';
+    for (const stack of stacks) {
+        const eof = stack.trim()
+        const match = eof.trim().match(/\((.*)?\)/);
+        let fnStack = match === null ? 'at' : stack.replace(match[0], '').trim()
+        ,file = (match === null ? eof.slice(3) : match[1]).replace(location.origin, '')
+        ,lines = file.split(':').slice(1).join(':');
+        file = file.replace(`:${lines}`, '');
+        html += `<div class="error-stack">
+            <p data-file-error="${file}" onclick="getCode('${file}','${lines}')">
+                <span><b class="color-primary">file:</b> ${file}</span>
+                <span><b class="color-primary">line:</b> ${lines}</span>
+                <span><b class="color-primary">callback:</b> ${fnStack}</span>
+            </p>
+        </div>`;
+    }
+    return html;
 }

@@ -1,4 +1,4 @@
-export const STATUS = {
+export const StatusMessage = {
     // 1xx Informational
 
     100: 'Continue',
@@ -91,7 +91,7 @@ class Status {
         if (!this.exists_status(code)) {
             throw new Error(`code ${code} status no exists`);
         }
-        return STATUS[code];
+        return StatusMessage[code];
     }
 
     isInfo() {
@@ -112,7 +112,7 @@ class Status {
     }
 
     exists_status(code) {
-        return (code in STATUS);
+        return (code in StatusMessage);
     }
 }
 

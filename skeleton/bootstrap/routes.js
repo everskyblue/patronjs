@@ -1,17 +1,39 @@
-import * as controller from "../app/controllers.js";
-import route from "./app.js";
+import { contact, articles } from "@controllers/controllers";
+import IndexController from "@controllers/index-controller";
 
-route.hash('/', {
-    controller: controller.IndexController,
-    load: {
-        js: ['index'],
-        css: []
+export default {
+    paths: [
+        {
+            path: "/",
+            option: [
+                {
+                    controller: IndexController,
+                    load: {
+                        js: ["index"],
+                        css: [],
+                    },
+                },
+                "render",
+            ],
+        },
+        {
+            path: "/contact",
+            option: contact
+        },
+        {
+            path: "/articulos",
+            option: articles,
+        }
+    ],
+
+    groups: {
+        '/admin': [
+            {
+                path: '',
+                option: function () {
+                    console.log(arguments);
+                }
+            }
+        ]
     }
-}, 'render');
-
-
-route.hash('/contact', controller.ContactController, 'render');
-route.hash('/articulos', controller.ArticleController, 'render');
-
-
-export default route;
+};

@@ -1,5 +1,5 @@
 {
-    "name": "jspatron/app",
-    "main": "../outlib/app/index.js",
+    "name": "patron/app",
+    "main": "index.js",
     "typings": "../typings/app.d.ts"
 }

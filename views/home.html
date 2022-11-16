@@ -1,0 +1,7 @@
+<reference path="index.html"></reference>
+
+<slot-content>
+    <div @if="id === 1" data-[name_prop]=[id]>
+        <p key="44" data-list-name=[list] @each="const list of lists" :bind="list">%{el id del usuario es:} + ${id}</p>
+    </div>
+</slot-content>

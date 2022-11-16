@@ -5,12 +5,12 @@ export const debug = true;
 export const base_url = location.origin;
 
 // public directory
-export const public_dir = `${base_url}/skeleton/public`;
+export const public_dir = `${base_url}`;
 
 // location assets
 export const assets_location= {
-    js: `${public_dir}/assets/js/`,
-    css: `${public_dir}/assets/css/`
+    js: `${public_dir}/assets/javascripts/`,
+    css: `${public_dir}/assets/stylesheets/`
 };
 
 /**

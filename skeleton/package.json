@@ -7,8 +7,11 @@
   "license": "BSD-2-Clause",
   "homepage": "https://github.com/everskyblue/patronjs#readme",
   "scripts": {
-    "start": "webpack --mode production",
-    "build-dev": "webpack --mode none"
+    "webpack-start": "webpack --mode production",
+    "webpack-build-dev": "webpack --mode none",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [
     "framework",

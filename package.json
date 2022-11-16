@@ -1,0 +1,30 @@
+{
+  "name": "patronjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "string-tocapitalize": "github:everskyblue/string-toCapitalize",
+    "vite": "^3.0.2"
+  },
+  "devDependencies": {
+    "typescript-plugin-css-modules": "^3.4.0",
+    "vite-tsconfig-paths": "^3.5.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/everskyblue/patronjs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/everskyblue/patronjs/issues"
+  },
+  "homepage": "https://github.com/everskyblue/patronjs#readme"
+}

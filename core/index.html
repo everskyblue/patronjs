@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/mono-blue.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <title>error handler</title>
+    <style>
+        #error-container {
+            height: 100vh;
+            background: aliceblue;
+            overflow: hidden;
+        }
+        #error-container .error-title {
+            margin: 20vh auto;
+            width: 50vw;
+            display: flex;
+            flex-direction: column;
+        }
+        #error-container .error-title > div:nth-child(1)  {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 1px 5px 3px rgba(0, 0, 0, 0.666);
+        }
+    </style>
+</head>
+<body>
+    <div id="error-container">
+        <section class="error-title">
+            <div class="type-error-info">
+                <p class="type-error">Error Name: ${}</p>
+            </div>
+            <div class="message-error-info">
+                <p class="message-error"></p>
+            </div>
+        </section>
+        <section class="error-stacks">
+            <div class="error-stack">
+                <p data-file-error="">file</p>
+            </div>
+            <div class="error-stack">
+                <p data-file-error="">file 2</p>
+            </div>
+        </section>
+    </div>
+    <script>
+        window.getCode = function getCode(file, line) {
+            if (file.endsWith('.js') && file.startsWith('/')) {
+                fetch(file)
+                .then(res => res.text())
+                .then(text => {
+                    const value = hljs.highlight(text, {language: 'typescript'}).value;
+                    console.log(value);
+                    document.querySelectorAll('.toggle-code').forEach(node => {
+                        node.classList.toggle('toggle-code');
+                    })
+                })
+            }
+        }
+    </script>
+</body>
+</html>

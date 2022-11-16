@@ -1,9 +1,9 @@
-import Controller from "../MainController.js";
+import Controller from "./MainController.js";
 
 export default class IndexController extends Controller {
     constructor(container) {
         super()
-        
+        console.log(container);
     }
 
     render() {

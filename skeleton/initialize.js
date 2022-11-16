@@ -1,5 +1,5 @@
-import "./apply.routes.js";
-import app from "./app";
+import "./bootstrap/apply.routes";
+import app from "./bootstrap/app";
 
 try {
     //catch url changes and run app

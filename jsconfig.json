@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "patron": ["./core/*", "./core/patron.js"],
+            "@controllers/*": ["./skeleton/app/controller/*"]
+        }
+    },
+    "exclude": [
+        "node_modules","cli-create-app", "dist"
+      ],
+}
