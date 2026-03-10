@@ -1,0 +1,1 @@
+export { View, ViewConfig } from "./view.js";

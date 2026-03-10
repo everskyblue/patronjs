@@ -1,4 +1,4 @@
-import readFile, {ResponseReader} from "../read-file";
+import readFile, {ResponseReader} from "../read-file.js";
 
 let isNode = typeof module == 'object' && typeof module.exports == 'object';
 

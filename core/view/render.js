@@ -1,8 +1,8 @@
 import { setEvaluatorCode, output } from "./evaluate.js";
 import { get_text_script, get_style } from "./scope.js";
 import { getStructList, todo } from "./analyzer.js";
-import { reader } from "./fs/read";
-import { parserImport } from "./analyzer/import";
+import { reader } from "./fs/read.js";
+import { parserImport } from "./analyzer/import.js";
 /**
  * @since 0.3.0
  * @param {HTMLElement} node 
